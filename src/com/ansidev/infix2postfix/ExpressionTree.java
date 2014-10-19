@@ -7,6 +7,7 @@
  */
 package com.ansidev.infix2postfix;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 
@@ -30,6 +31,10 @@ public class ExpressionTree {
 	
 	public boolean isLeaf() {
 		return (this.leftExprTree == null && this.rightExprTree == null);
+	}
+	
+	public boolean isEmpty() {
+		return (this.Node == null && this.leftExprTree == null && this.rightExprTree == null);
 	}
 	
 	public static String formatExpression(String expression)
@@ -58,19 +63,21 @@ public class ExpressionTree {
 		nodeStack.push(exprTree);
 //		System.out.println("Pushed " + nodeStack.peek().Node.Value + " to nodeStack");
 	}
+	
 	public ExpressionTree buildTree(String infixExpr) {
 		infixExpr = ExpressionTree.formatExpression(infixExpr);
+//		System.out.println("Before: " + infixExpr);		
 		int j = 0;
-		System.out.println(infixExpr);
+//		System.out.println(infixExpr);
 		ArrayList<ExpressionNode>  exprArray = Parser.queueToArrList(Parser.getAllExpressionNode(infixExpr));
 		Stack<ExpressionTree> opStack = new Stack<ExpressionTree>();
 		Stack<ExpressionTree> nodeStack = new Stack<ExpressionTree>();
 		String regex = "^(sin|cos|tan|log|ln|factor|opposite)?\\($";
 		for(int i = 0; i < exprArray.size(); i++) {
-			System.out.println("i  = " + i);
-			System.out.println("\nElement = " + exprArray.get(i).Value);
+//			System.out.println("i  = " + i);
+//			System.out.println("\nElement = " + exprArray.get(i).Value);
 			if(exprArray.get(i).Type == 1) {//isOperand
-				System.out.println("isOperand");
+//				System.out.println("isOperand");
 				nodeStack.push(new ExpressionTree(exprArray.get(i)));
 //				System.out.println("Pushed " + nodeStack.peek().Node.Value + " to nodeStack");
 //				if(!nodeStack.isEmpty()) System.out.println("\nnodeStack Top: " + nodeStack.peek().Node.Value);
@@ -82,7 +89,7 @@ public class ExpressionTree {
 //				}
 			}
 			else if(exprArray.get(i).Value.matches("^\\($") || exprArray.get(i).Type == 3) {//isOpenBracket OR isFunctionName
-				System.out.println("is ( OR functionName");
+//				System.out.println("is ( OR functionName");
 				opStack.push(new ExpressionTree(exprArray.get(i)));
 //				System.out.println("Pushed " + opStack.peek().Node.Value + " to opStack");
 //				System.out.println("nodeStack Top: " + nodeStack.peek().Node.Value);
@@ -90,45 +97,45 @@ public class ExpressionTree {
 			}
 			else if(exprArray.get(i).Value.matches("^\\)$")) {//isCloseBracket
 				j++;
-				System.out.println(") " + i);
+//				System.out.println(") " + i);
 				while(!opStack.isEmpty() && opStack.peek().Node.Type != 4) {
-						System.out.println("Not (");
-					System.out.println("\nopStack Top Element = " + opStack.peek().Node.Value);
-					System.out.println("opStack.peek().Node.Type = " + opStack.peek().Node.Type);
+//					System.out.println("Not (");
+//					System.out.println("\nopStack Top Element = " + opStack.peek().Node.Value);
+//					System.out.println("opStack.peek().Node.Type = " + opStack.peek().Node.Type);
 					if(opStack.peek().Node.Type == 3) {
-						System.out.println("is Function");
+//						System.out.println("is Function");
 //						System.out.println("\nStart creating subtree");
 						createSubTree(opStack, nodeStack);
 //						System.out.println("Finished creating subtree");
 //						System.out.println("\nnodeStack Top: " + nodeStack.peek().Node.Value);
 //						System.out.println("opStack Top: " + opStack.peek().Node.Value);
-						System.out.println("Break");
-						System.out.println("Ended looping");
+//						System.out.println("Break");
+//						System.out.println("Ended looping");
 						break;
 					}
 					else {
-						System.out.println("is Operator");
-					createSubTree(opStack, nodeStack);
-//					System.out.println("Finished creating subtree");
-//					System.out.println("\nnodeStack Top: " + nodeStack.peek().Node.Value);
+//						System.out.println("is Operator");
+						createSubTree(opStack, nodeStack);
+//						System.out.println("Finished creating subtree");
+//						System.out.println("\nnodeStack Top: " + nodeStack.peek().Node.Value);
+//						System.out.println("opStack Top: " + opStack.peek().Node.Value);
+//						System.out.println("Continue");
+					}
+//					System.out.println("Ended looping");
+//					System.out.println("\nopStack Top Element = " + opStack.peek().Node.Value);
+//					System.out.println("opStack.peek().Node.Type = " + opStack.peek().Node.Type);
+//					System.out.println("\nnodeStack Top Element = " + nodeStack.peek().Node.Value);
+//					System.out.println("nodeStack.peek().Node.Type = " + nodeStack.peek().Node.Type);
+					if(!opStack.isEmpty() && opStack.peek().Node.Type == 4) {
+//						System.out.println("Pop "+ opStack.peek().Node.Value + " out of opStack");//Pop ( out
+						opStack.pop();
+					}
+//					System.out.println("nodeStack Top: " + nodeStack.peek().Node.Value);
 //					System.out.println("opStack Top: " + opStack.peek().Node.Value);
-//					System.out.println("Continue");
-				}
-				System.out.println("Ended looping");
-//				System.out.println("\nopStack Top Element = " + opStack.peek().Node.Value);
-//				System.out.println("opStack.peek().Node.Type = " + opStack.peek().Node.Type);
-//				System.out.println("\nnodeStack Top Element = " + nodeStack.peek().Node.Value);
-//				System.out.println("nodeStack.peek().Node.Type = " + nodeStack.peek().Node.Type);
-				if(!opStack.isEmpty() && opStack.peek().Node.Type == 4) {
-					System.out.println("Pop "+ opStack.peek().Node.Value + " out of opStack");//Pop ( out
-					opStack.pop();
-				}
-//				System.out.println("nodeStack Top: " + nodeStack.peek().Node.Value);
-//				System.out.println("opStack Top: " + opStack.peek().Node.Value);
 				}
 			}
 			else if(exprArray.get(i).Type == 2) {//isOperator
-				System.out.println("is Operator");
+//				System.out.println("is Operator");
 				while(!opStack.isEmpty() && Parser.Precedence(opStack.peek().Node.Value) >= Parser.Precedence(exprArray.get(i).Value)) {
 					createSubTree(opStack, nodeStack);
 //					System.out.println("nodeStack Top: " + nodeStack.peek().Node.Value);
@@ -144,7 +151,7 @@ public class ExpressionTree {
 		while(!opStack.isEmpty()) {
 				createSubTree(opStack, nodeStack);
 		}
-		System.out.println("Root Node of Expression Tree is " + nodeStack.peek().Node.Value);
+//		System.out.println("Root Node of Expression Tree is " + nodeStack.peek().Node.Value);
 		return nodeStack.pop();
 	}
 	public void Print(ExpressionTree rootNode) {
@@ -156,6 +163,91 @@ public class ExpressionTree {
 		else {
 			System.out.println("Empty expression tree");
 		}
+	}
+	
+	public double evaluateExpressionTree(ExpressionTree node)
+	{
+//		System.out.println("Start evaluating expression tree with root = " + node.Node.Value);
+	    double result = 0;
+	    if (node.isLeaf()) {
+//	    	System.out.println(node.Node.Value + " is leaf!");
+	    	if(node.Node.Value.equalsIgnoreCase("π")) {
+	    		result = Math.PI;
+	    	}
+	    	else if(node.Node.Value.equalsIgnoreCase("e")) {
+	    		result = Math.E;
+	    	}
+	    	else {
+	    		result = Double.parseDouble(node.Node.Value);
+	    	}
+//	    	System.out.println(result);
+	    }
+	    else if(node.rightExprTree == null)
+	    {
+//	    	System.out.println("\tLeft of " + node.Node.Value + " is " + node.leftExprTree.Node.Value);
+	        double x = evaluateExpressionTree(node.leftExprTree);
+//	        System.out.println(x);
+	        
+	        switch(node.Node.Value)
+	        {
+	            case "sin": 
+	            	result = Math.sin(x); 
+	            	break;
+	            case "cos": 
+	            	result = Math.cos(x); 
+	            	break;
+	            case "tan": 
+	            	result = Math.tan(x); 
+	            	break;
+	            case "log": 
+	            	result = Math.log10(x); 
+	            	break;
+	            case "ln": 
+	            	result = Math.log(x); 
+	            	break;
+	            case "factor":
+	            	result = Double.parseDouble(Parser.factor((int)x).toString());
+	            	break;
+	            case "opposite":
+	            	result = x * -1;
+	            	break;
+	        }
+//        	System.out.println(node.Node.Value + "(" + x + ") = " + result);
+	    }
+	    else {
+//	    	System.out.println("\tLeft of " + node.Node.Value + " is " + node.leftExprTree.Node.Value);
+	        double x = evaluateExpressionTree(node.leftExprTree);
+//	        System.out.println(x);
+//	        System.out.println("\tRight of " + node.Node.Value + " is " + node.rightExprTree.Node.Value);
+	        double y = evaluateExpressionTree(node.rightExprTree);
+//	        System.out.println(y);
+	        
+	        switch(node.Node.Value)
+	        {
+	            case "+": 
+	            	result = x + y;
+	            	break;
+	            case "-": 
+	            	result = x - y; 
+	            	break;
+	            case "*": 
+	            	result = x * y; 
+	            	break;
+	            case "/": 
+	            	result = x / y; 
+	            	break;
+	            case "%": 
+	            	result = x % y; 
+	            	break;
+	            case "^": 
+	            	result = Math.pow(x, y); 
+	            	break;
+	        }
+//        	System.out.println(x + node.Node.Value + y + " = " + result);
+
+	    }
+//	    System.out.println("Result = " + result);
+	    return result;
 	}
 	
 //	public ExpressionTree(String infixExpr) {

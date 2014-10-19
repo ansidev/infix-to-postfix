@@ -47,9 +47,9 @@ public class ExpressionNode {
 
 	public void Print() {
 		if(this.Value != null) {
-			System.out.println("Value: " + Value);
-			System.out.println("Start: " + Integer.toString(start));
-			System.out.println("End: " + Integer.toString(end));
+//			System.out.println("Value: " + Value);
+//			System.out.println("Start: " + Integer.toString(start));
+//			System.out.println("End: " + Integer.toString(end));
 		}
 	}
 }

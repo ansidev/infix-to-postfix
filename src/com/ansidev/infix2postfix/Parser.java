@@ -1,9 +1,11 @@
 package com.ansidev.infix2postfix;
-import java.beans.Expression;
+//import java.beans.Expression;
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Scanner;
+import java.math.BigInteger;
 
 //import javax.management.RuntimeErrorException;
 
@@ -15,6 +17,23 @@ import java.util.regex.Matcher;
  * @homepage: http://blog.ansidev.tk/
  */
 public class Parser {
+	public static BigInteger factor(int n) {
+		BigInteger k = new BigInteger("1");
+		BigInteger result = new BigInteger("1");
+		if ( n < 0 ) {
+//			System.out.println("Invalid value!");
+			return BigInteger.ZERO;
+		}
+		else
+		{
+			for (int i = 1 ; i <= n ; i++) {
+				result = result.multiply(k);
+				k = k.add(BigInteger.ONE);
+			}
+//				System.out.println("Factorial of "+ n + " is = "+ result);
+		}
+		return result;
+	}
 	
 	public static void printStack(Stack<ExpressionTree> s) {
 		Stack<ExpressionTree> stack = s;
@@ -46,14 +65,14 @@ public class Parser {
 	}
 	
 	public static String addMulOp(String s) {
-		String regex = "(?<operand>([0-9.e\\)]|\u03C0|^[sin|cos|tan|log|ln|factor|opposite]){1})(?<bracket>\\({1})";
+		String regex = "(?<first>([0-9.e\\)]|\u03C0|^[sin|cos|tan|log|ln|factor|opposite]){1})(?<second>[\\(|e|\u03C0]{1})";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(s);
         while (matcher.find()) {
         	String oldStr = matcher.group();
 //        	System.out.println("oldStr: " + oldStr);
         	StringBuilder newStr = new StringBuilder(); 
-			newStr.append(matcher.group("operand")).append("*").append(matcher.group("bracket"));
+			newStr.append(matcher.group("first")).append("*").append(matcher.group("second"));
 			s = s.replace(oldStr, newStr.toString());
 //			System.out.println(s);
         }
@@ -188,9 +207,9 @@ public class Parser {
 			resultArr.add(queue.dequeue());
 		}
 		//Print Array List
-		for(int i = 0; i < resultArr.size(); i++) {
-			System.out.println(resultArr.get(i).Value);
-		}
+//		for(int i = 0; i < resultArr.size(); i++) {
+//			System.out.println(resultArr.get(i).Value);
+//		}
 		
 		return resultArr;
 	}

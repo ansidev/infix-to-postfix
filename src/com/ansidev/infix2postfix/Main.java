@@ -53,12 +53,17 @@ public class Main {
 //		arrStr.add("Hello");
 //		arrStr.add("world");
 //		System.out.println(arrStr.get(1));
-		String infixExpr = "2( 1 + sin( π / 2 + 1/ 4))- 3.32 + e * 8.3 - cos( 2 π / 5) * factor( e ^ 3) + (1+2) (3+4)";
-		System.out.println("Before: " + infixExpr);
 		
+//		System.out.println(Parser.factor(20000).toString());
+//		System.out.println("Finished");
+		
+		String infixExpr = "2( 1 + sin( π / 2 + 1/ 4))- 3.32 + e * 8.3 - cos( 2 π / 5) * factor( 20) + (1+2) (3+4)";
+		System.out.println("Before: " + infixExpr);
 		ExpressionTree exprTree = new ExpressionTree();
 		exprTree.buildTree(infixExpr);
-//		exprTree.Print(exprTree.buildTree(infixExpr));
+		
+		double result = exprTree.evaluateExpressionTree(exprTree.buildTree(infixExpr));
+		System.out.println(result);
 
 //		infixExpr = ExpressionTree.formatExpression(infixExpr);
 //		System.out.println("After: " + infixExpr);
