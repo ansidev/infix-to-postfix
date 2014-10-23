@@ -65,14 +65,14 @@ public class Parser {
 	}
 	
 	public static String addMulOp(String s) {
-		String regex = "(?<first>([0-9.e\\)]|\u03C0|^[sin|cos|tan|log|ln|factor|opposite]){1})(?<second>[\\(|e|\u03C0]{1})";
+		String regex = "(([0-9.e\\)]|\u03C0|^[sin|cos|tan|log|ln|factor|opposite]){1})([\\(|e|\u03C0]{1})";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(s);
         while (matcher.find()) {
         	String oldStr = matcher.group();
 //        	System.out.println("oldStr: " + oldStr);
         	StringBuilder newStr = new StringBuilder(); 
-			newStr.append(matcher.group("first")).append("*").append(matcher.group("second"));
+			newStr.append(matcher.group(1)).append("*").append(matcher.group(3));
 			s = s.replace(oldStr, newStr.toString());
 //			System.out.println(s);
         }
